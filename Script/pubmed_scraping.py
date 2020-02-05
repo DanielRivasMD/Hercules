@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-import csv
+from csv import writer
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -44,8 +44,10 @@ def publication_collector():
 
 
 def page_turner():
+
   # iterator control
   pagination = browser.find_element_by_class_name('pagination')
+
   input_value = "input[value='" + str(ix) + "']"
   turn_page = pagination.find_element_by_css_selector(input_value)
   turn_page.clear()
@@ -55,9 +57,8 @@ def page_turner():
 
 # prepare output file
 outputFile = authorQueried.replace(" ", "_")
-# with open('Data/' + outputFile + '.csv', 'w') as csv_file:
-with open(outputFile + '.csv', 'w') as csv_file:
-  csv_writer = csv.writer(csv_file, quoting=csv.QUOTE_NONE)
+with open('Data/' + outputFile + '.csv', 'w') as csv_file:
+  csv_writer = writer(csv_file)
   headers = ['Title', 'Journal', 'Position', 'Authors']
   csv_writer.writerow(headers)
 
@@ -69,14 +70,20 @@ with open(outputFile + '.csv', 'w') as csv_file:
   publication_collector()
 
   # page loop
-  pgs = int(soup.find('h3', class_="page").input['last'])
-  for ix in range(1, pgs):
+  try:
+    pgs = int(soup.find('h3', class_="page").input['last'])
+  except AttributeError as e:
+    pgs = 1
+  else:
+    for ix in range(1, pgs):
 
-    # turn the page
-    page_turner()
+      # turn the page
+      page_turner()
 
-    # load into bs4 from selenium
-    soup = BeautifulSoup(browser.page_source, 'html.parser')
-    publication_collector()
+      # load into bs4 from selenium
+      soup = BeautifulSoup(browser.page_source, 'html.parser')
+      publication_collector()
+  finally:
+    print("Number of pages:", pgs)
 
 browser.quit()
