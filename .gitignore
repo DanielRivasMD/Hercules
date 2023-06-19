@@ -1,17 +1,18 @@
-# Data folders
-Data/
-Archive/Assets/
-Archive/Plots/
-Archive/Prints/
+# archive folders
+arch/assets/
+arch/notes/
+arch/plots/
+arch/prints/
+arch/source/                                                                            │
+
+# data folders
+data/
 
 # R package
-Script/Rpacks/
+src/Rpacks/
 
-# Deprecated scripts
-Script/Deprecated/
+# deprecated scripts
+src/deprecated/
 
-# Go Executables
-Script/GoWorkshop/Executables/
-
-# Scimago Journal DB index
-Archive/Source/scimagojrDB.csv.idx
+# Go executables
+src/GoWorkshop/excalibur/
