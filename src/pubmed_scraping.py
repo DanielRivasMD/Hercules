@@ -1,63 +1,55 @@
+####################################################################################################
+
 import os
 import re
 import sys
+import time
 from csv import writer
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+####################################################################################################
+
+exec(open("src/page.py").read())
+exec(open("src/publication.py").read())
+
+####################################################################################################
+
+# ignore warnings
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+# declarations
+projDir = '/Users/drivas/Factorem/PUBMEDrecord'
+# outDir = projDir + '/' + 'data/wasabiScrappedSource/raw'
+# wasabi = 'https://dnazoo.s3.wasabisys.com/'
+# dnaAddress = wasabi + 'index.html'
+
 # change directory
-os.chdir("/Users/Daniel/Factorem/PUBMEDrecord/")
+os.chdir(projDir)
 
 # arguments
-httpSource = sys.argv[1]
-authorQueried = sys.argv[2]
+httpSource = "https://pubmed.ncbi.nlm.nih.gov/?term=mauceli+e%5Bauthor%5D"
+authorQueried = "Mauceli"
+
+# httpSource = sys.argv[1]
+# authorQueried = sys.argv[2]
 
 # launch browser
-browser = webdriver.Chrome()
+browser = webdriver.Firefox()
 
 # directing to ncbi
 browser.get(httpSource)
+browser.maximize_window()
 
-
-def publication_collector():
-
-  # publication loop
-  for article in soup.find_all('div', class_="rslt"):
-    # title
-    title = article.find('p', class_="title").text
-    # journal
-    journal = article.find('span', class_="jrnl").text
-    # authors
-    author_element = article.find('p', class_="desc")
-    authors = author_element.text
-    ind_authors = author_element.text.split(", ")
-    if re.match(authorQueried, ind_authors[0]):
-      author_position = "First"
-    elif re.match(authorQueried, ind_authors[-1]):
-      author_position = "Corresponding"
-    else:
-      author_position = "Middle"
-    # write
-    csv_writer.writerow([title, journal, author_position, authors])
-
-
-def page_turner():
-
-  # iterator control
-  pagination = browser.find_element_by_class_name('pagination')
-
-  input_value = "input[value='" + str(ix) + "']"
-  turn_page = pagination.find_element_by_css_selector(input_value)
-  turn_page.clear()
-  turn_page.send_keys((ix + 1))
-  turn_page.send_keys(Keys.RETURN)
-
+# wait for page to load
+time.sleep(3)
 
 # prepare output file
 outputFile = authorQueried.replace(" ", "_")
-with open('Data/' + outputFile + '.csv', 'w') as csv_file:
+with open('data/' + outputFile + '.csv', 'w') as csv_file:
   csv_writer = writer(csv_file)
   headers = ['Title', 'Journal', 'Position', 'Authors']
   csv_writer.writerow(headers)
