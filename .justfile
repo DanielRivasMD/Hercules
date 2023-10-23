@@ -51,5 +51,6 @@ install:
 
   echo "Install..."
   go install
+  mv -v "${HOME}/.go/bin/Hercules" "${HOME}/.go/bin/hercules"
 
 ####################################################################################################
