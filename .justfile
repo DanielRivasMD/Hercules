@@ -22,12 +22,15 @@ _default:
 ####################################################################################################
 
 # build for OSX
-osx OUT:
+osx:
   #!/bin/bash
   set -euo pipefail
 
+  # declarations
+  source .just.sh
+
   echo "Building..."
-  go build -v -o {{OUT}}
+  go build -v -o ${hercules}/excalibur/hercules
 
 ####################################################################################################
 
