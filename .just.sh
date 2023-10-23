@@ -5,6 +5,6 @@ set -euo pipefail
 
 # home
 home="${HOME}"
-hercules="${home}/Factorem/PUBMEDrecord"
+hercules="${home}/Factorem/Hercules"
 
 #################################################################################
