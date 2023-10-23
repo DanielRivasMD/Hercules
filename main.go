@@ -16,7 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package main
 
-import "hercules/cmd"
+import "github.com/DanielRivasMD/Hercules/cmd"
 
 func main() {
 	cmd.Execute()
