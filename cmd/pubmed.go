@@ -22,6 +22,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/gocolly/colly"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,12 +47,33 @@ to quickly create a Cobra application.`,
 	
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("pubmed called")
+		scrap()
+		fmt.Println("scrapped!")
 	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+func scrap() {
+	c := colly.NewCollector(
+		colly.AllowedDomains("quotes.toscrape.com"),
+	)
 
+	c.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/118.0")
+		fmt.Println("Visiting", r.URL)
+	})
+
+	c.OnResponse(func(r *colly.Response) {
+		fmt.Println("Response Code", r.StatusCode)
+	})
+
+	c.OnError(func(r *colly.Response, err error) {
+		fmt.Println("error", err.Error())
+	})
+
+	c.Visit("http://quotes.toscrape.com/random")
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
