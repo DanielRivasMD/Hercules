@@ -20,15 +20,38 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
-	"github.com/spf13/cobra"
 	"github.com/gocolly/colly"
+	"github.com/spf13/cobra"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // declarations
-var ()
+var (
+	pubmed = "https://pubmed.ncbi.nlm.nih.gov/"
+	jstore = "https://www.j2store.net/demo/index.php/shop"
+	// authorFirstName = "SD"
+	// authorLastName  = "Rivas-Carrillo"
+	authorFirstName = "Evan"
+	authorLastName  = "Mauceli"
+	perPage         = 10
+)
+
+var (
+	pages      string
+	articles   []article
+	noArticles int
+	TmpArticle article
+	Authors    string
+	Journal    string
+)
+
+type article struct {
+	authors string
+	journal string
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,35 +67,95 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("pubmed called")
-		scrap()
-		fmt.Println("scrapped!")
+		// fmt.Println("pubmed called")
+		scrap(pubmed, authorFirstName, authorLastName)
+		// scrap(jstore)
+		// fmt.Println("scrapped!")
 	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func scrap() {
-	c := colly.NewCollector(
-		colly.AllowedDomains("quotes.toscrape.com"),
-	)
+func scrap(url, authorFirstName, authorLastName string) {
 
-	c.OnRequest(func(r *colly.Request) {
-		r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/118.0")
-		fmt.Println("Visiting", r.URL)
-	})
+	// c := colly.NewCollector(
+	// // colly.AllowedDomains(url),
+	// )
 
-	c.OnResponse(func(r *colly.Response) {
-		fmt.Println("Response Code", r.StatusCode)
-	})
+	// c.OnRequest(func(r *colly.Request) {
+	// 	// r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/118.0")
+	// 	fmt.Println("Visiting", r.URL)
+	// })
 
-	c.OnError(func(r *colly.Response, err error) {
-		fmt.Println("error", err.Error())
-	})
+	// c.OnResponse(func(r *colly.Response) {
+	// 	fmt.Println("Response Code", r.StatusCode)
+	// })
 
-	c.Visit("http://quotes.toscrape.com/random")
+	// c.OnError(func(r *colly.Response, err error) {
+	// 	fmt.Println("error", err.Error())
+	// })
+
+	// // collect article number
+	// c.OnHTML("h3", func(h *colly.HTMLElement) {
+	// 	h.ForEach("span", func(_ int, h *colly.HTMLElement) {
+	// 		// fmt.Println(h.Text)
+	// 		noArticles, _ = strconv.Atoi(h.Text)
+	// 	})
+	// })
+
+	// searchUrl := url + "?term=" + authorLastName + "+" + authorFirstName + "[" + "author" + "]"
+	// c.Visit(searchUrl)
+
+	pgs := 4
+
+	for i := 1; i <= pgs; i++ {
+		fmt.Println("iteration", i)
+
+		sc := colly.NewCollector(
+		// colly.AllowedDomains(url),
+		)
+
+		sc.OnHTML("span.full-authors", func(h *colly.HTMLElement) {
+			Authors = h.Text
+			// fmt.Println(h.Text)
+		})
+
+		sc.OnHTML("span.short-journal-citation", func(h *colly.HTMLElement) {
+			Journal = h.Text
+			fmt.Println(Journal)
+		})
+
+		// TmpArticle = article{
+		// 	authors: Authors,
+		// 	journal: Journal,
+		// }
+
+		// fmt.Println("Tmp Article", TmpArticle)
+
+		// articles := append(articles, TmpArticle)
+
+		// page := noArticles / perPage
+		// fmt.Println(page, noArticles, perPage)
+		// modulus := noArticles % perPage
+		// if modulus == 0 {
+		// 	pages = strconv.Itoa(page)
+		// } else {
+		// 	pages = strconv.Itoa(page + 1)
+		// }
+
+		// hardcoded
+		pages = strconv.Itoa(i)
+
+		// fmt.Println(pages)
+		fullUrl := url + "?term=" + authorLastName + "+" + authorFirstName + "[" + "author" + "]" + "&page=" + pages
+		sc.Visit(fullUrl)
+
+	}
+	// fmt.Println(articles)
+	// fmt.Println(noArticles)
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
