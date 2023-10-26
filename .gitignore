@@ -1,18 +1,11 @@
 # archive folders
-arch/assets/
-arch/notes/
-arch/plots/
-arch/prints/
-arch/source/                                                                            │
+arch
 
 # data folders
 data/
 
-# R package
-src/Rpacks/
-
-# deprecated scripts
+# deprecated
 src/deprecated/
 
-# Go executables
-src/GoWorkshop/excalibur/
+# executables
+excalibur
