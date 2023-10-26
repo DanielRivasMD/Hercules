@@ -21,6 +21,7 @@ package cmd
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/gocolly/colly"
 	"github.com/spf13/cobra"
@@ -119,7 +120,11 @@ func scrap(url, authorFirstName, authorLastName string) {
 
 		sc.OnHTML("span.full-authors", func(h *colly.HTMLElement) {
 			Authors = h.Text
-			fmt.Println(Authors)
+			Authors = strings.ReplaceAll(Authors, ", ", ",")
+			Authors = strings.ReplaceAll(Authors, "; ", ",")
+			for _, a := range strings.Split(Authors, ",") {
+				fmt.Println(a)
+			}
 		})
 
 		// sc.OnHTML("span.short-journal-citation", func(h *colly.HTMLElement) {
