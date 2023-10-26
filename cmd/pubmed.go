@@ -111,7 +111,7 @@ func scrap(url, authorFirstName, authorLastName string) {
 	pgs := 4
 
 	for i := 1; i <= pgs; i++ {
-		fmt.Println("iteration", i)
+		// fmt.Println("iteration", i)
 
 		sc := colly.NewCollector(
 		// colly.AllowedDomains(url),
@@ -119,13 +119,13 @@ func scrap(url, authorFirstName, authorLastName string) {
 
 		sc.OnHTML("span.full-authors", func(h *colly.HTMLElement) {
 			Authors = h.Text
-			// fmt.Println(h.Text)
+			fmt.Println(Authors)
 		})
 
-		sc.OnHTML("span.short-journal-citation", func(h *colly.HTMLElement) {
-			Journal = h.Text
-			fmt.Println(Journal)
-		})
+		// sc.OnHTML("span.short-journal-citation", func(h *colly.HTMLElement) {
+		// 	Journal = h.Text
+		// 	fmt.Println(Journal)
+		// })
 
 		// TmpArticle = article{
 		// 	authors: Authors,
