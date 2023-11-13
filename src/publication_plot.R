@@ -1,8 +1,10 @@
 ####################################################################################################
 
-sorter <- function(raw) {
+sorter <- function(raw, dir = 'data') {
 
-  df <- read_tsv(paste0(raw, '.raw'), col_names = "authors")
+  # if (dir == NULL) dir = 'data'
+
+  df <- read_tsv(paste0(dir, '/', raw, '.raw'), col_names = "authors")
 
   int <- 5
   up <- dim(df)[1]
@@ -20,7 +22,7 @@ sorter <- function(raw) {
 
   dc %<>% arrange(desc(count))
 
-  write.csv(as.data.frame(dc), paste0(raw, '.csv'), quote = F, row.names = F)
+  write.csv(as.data.frame(dc), paste0(dir, '/', raw, '.csv'), quote = F, row.names = F)
 
 }
 
