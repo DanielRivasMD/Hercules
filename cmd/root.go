@@ -19,9 +19,10 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"log"
 	"os"
 
-	"github.com/atrox/homedir"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
 )
@@ -30,12 +31,13 @@ import (
 
 // declarations
 var (
-	cfgFile string
+	cfgPath     string
+	cfgFile     string
+	verboseBool string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "hercules",
 	Short: "Web data bounty hunter",
@@ -57,53 +59,65 @@ with built-in and accessible documentation.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+	ε := rootCmd.Execute()
+	if ε != nil {
+		log.Fatal(ε)
 		os.Exit(1)
 	}
 }
 
-func init() {
-	cobra.OnInitialize(initConfig)
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+func initializeConfig(κ *cobra.Command, configPath string, configName string) error {
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.hercules.yaml)")
+	// initialize viper
+	ʌ := viper.New()
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// collect config path & file from persistent flags
+	ʌ.AddConfigPath(configPath)
+	ʌ.SetConfigName(configName)
+
+	// read the config file
+	ε := ʌ.ReadInConfig()
+	if ε != nil {
+		// okay if there isn't a config file
+		_, ϙ := ε.(viper.ConfigFileNotFoundError)
+		if !ϙ {
+			// return an error if we cannot parse the config file
+			return ε
+		}
+	}
+
+	// bind flags to viper
+	bindFlags(κ, ʌ)
+
+	return nil
 }
 
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// bind each cobra flag to its associated viper configuration
+func bindFlags(κ *cobra.Command, ʌ *viper.Viper) {
+
+	κ.Flags().VisitAll(func(σ *pflag.Flag) {
+
+		// apply the viper config value to the flag when the flag is not set and viper has a value
+		if !σ.Changed && ʌ.IsSet(σ.Name) {
+			ν := ʌ.Get(σ.Name)
+			κ.Flags().Set(σ.Name, fmt.Sprintf("%v", ν))
 		}
+	})
+}
 
-		// Search config in home directory with name ".hercules" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".hercules")
-	}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	viper.AutomaticEnv() // read in environment variables that match
+func init() {
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
+	// persistent flags
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "configFile", "c", "", "Config file")
+	rootCmd.PersistentFlags().StringVarP(&cfgPath, "configPath", "C", ".", "Path to config file")
+	rootCmd.PersistentFlags().StringVarP(&verboseBool, "verbose", "v", "false", "Verbosity switch")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
