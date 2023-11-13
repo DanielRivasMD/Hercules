@@ -17,36 +17,92 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/ttacon/chalk"
 )
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// declarations
+var ()
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // completionCmd represents the completion command
 var completionCmd = &cobra.Command{
-	Use:   "completion",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Use:    "completion [bash|zsh|fish|powershell]",
+	Hidden: true,
+	Short:  "Generate completion script",
+	Long: chalk.Green.Color("Daniel Rivas <danielrivasmd@gmail.com>") + `
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("completion called")
+To load completions:
+
+Bash:
+
+$ source <(hercules completion bash)
+
+# To load completions for each session, execute once:
+Linux:
+  $ hercules completion bash > /etc/bash_completion.d/hercules
+MacOS:
+  $ hercules completion bash > /usr/local/etc/bash_completion.d/hercules
+
+Zsh:
+
+# If shell completion is not already enabled in your environment you will need
+# to enable it.  You can execute the following once:
+
+$ echo "autoload -U compinit; compinit" >> ~/.zshrc
+
+# To load completions for each session, execute once:
+$ hercules completion zsh > "${fpath[1]}/_hercules"
+
+# You will need to start a new shell for this setup to take effect.
+
+Fish:
+
+$ hercules completion fish | source
+
+# To load completions for each session, execute once:
+$ hercules completion fish > ~/.config/fish/completions/hercules.fish
+
+Powershell:
+
+PS> hercules completion powershell | Out-String | Invoke-Expression
+
+# To load completions for every new session, run:
+PS> hercules completion powershell > hercules.ps1
+# and source this file from your powershell profile.
+`,
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	DisableFlagsInUseLine: true,
+	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
+	Args:                  cobra.ExactValidArgs(1),
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	Run: func(κ *cobra.Command, args []string) {
+		switch args[0] {
+		case "bash":
+			κ.Root().GenBashCompletion(os.Stdout)
+		case "zsh":
+			κ.Root().GenZshCompletion(os.Stdout)
+		case "fish":
+			κ.Root().GenFishCompletion(os.Stdout, true)
+		case "powershell":
+			κ.Root().GenPowerShellCompletion(os.Stdout)
+		}
 	},
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 func init() {
 	rootCmd.AddCommand(completionCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// completionCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// completionCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
