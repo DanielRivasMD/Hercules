@@ -1,11 +1,11 @@
-# archive folders
+# archive
 arch
 
-# data folders
+# data
 data/
 
 # deprecated
-src/deprecated/
+deprecated
 
 # executables
 excalibur
