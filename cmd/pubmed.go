@@ -82,25 +82,14 @@ to quickly create a Cobra application.`,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func scrap(url, authorFirstName, authorLastName string) {
 // func pager(url, authorFirstName, authorLastName string) int {
 
-	// c := colly.NewCollector(
-	// // colly.AllowedDomains(url),
-	// )
 // 	var noArt int
 
-	// c.OnRequest(func(r *colly.Request) {
-	// 	// r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/118.0")
-	// 	fmt.Println("Visiting", r.URL)
-	// })
 // 	c := colly.NewCollector(
 // 	// colly.AllowedDomains(url),
 // 	)
 
-	// c.OnResponse(func(r *colly.Response) {
-	// 	fmt.Println("Response Code", r.StatusCode)
-	// })
 // 	// collect article number
 // 	c.OnHTML("h3", func(h *colly.HTMLElement) {
 // 		h.ForEach("span", func(_ int, h *colly.HTMLElement) {
@@ -109,26 +98,14 @@ func scrap(url, authorFirstName, authorLastName string) {
 // 		})
 // 	})
 
-	// c.OnError(func(r *colly.Response, err error) {
-	// 	fmt.Println("error", err.Error())
-	// })
 // 	searchUrl := url + "?term=" + authorLastName + "+" + authorFirstName + "[" + "author" + "]"
 // 	c.Visit(searchUrl)
 
-	// // collect article number
-	// c.OnHTML("h3", func(h *colly.HTMLElement) {
-	// 	h.ForEach("span", func(_ int, h *colly.HTMLElement) {
-	// 		// fmt.Println(h.Text)
-	// 		noArticles, _ = strconv.Atoi(h.Text)
-	// 	})
-	// })
 // 	return noArt
 
-	// searchUrl := url + "?term=" + authorLastName + "+" + authorFirstName + "[" + "author" + "]"
-	// c.Visit(searchUrl)
 // }
 
-	pgs := 4
+func scrap(url, authorFirstName, authorLastName string, pgs int) {
 
 	for i := 1; i <= pgs; i++ {
 		// fmt.Println("iteration", i)
@@ -139,6 +116,7 @@ func scrap(url, authorFirstName, authorLastName string) {
 
 		sc.OnHTML("span.full-authors", func(h *colly.HTMLElement) {
 			Authors = h.Text
+			Authors = strings.ReplaceAll(Authors, ".", "")
 			Authors = strings.ReplaceAll(Authors, ", ", ",")
 			Authors = strings.ReplaceAll(Authors, "; ", ",")
 			for _, a := range strings.Split(Authors, ",") {
@@ -146,30 +124,7 @@ func scrap(url, authorFirstName, authorLastName string) {
 			}
 		})
 
-		// sc.OnHTML("span.short-journal-citation", func(h *colly.HTMLElement) {
-		// 	Journal = h.Text
-		// 	fmt.Println(Journal)
-		// })
-
-		// TmpArticle = article{
-		// 	authors: Authors,
-		// 	journal: Journal,
-		// }
-
-		// fmt.Println("Tmp Article", TmpArticle)
-
-		// articles := append(articles, TmpArticle)
-
-		// page := noArticles / perPage
-		// fmt.Println(page, noArticles, perPage)
-		// modulus := noArticles % perPage
-		// if modulus == 0 {
-		// 	pages = strconv.Itoa(page)
-		// } else {
-		// 	pages = strconv.Itoa(page + 1)
-		// }
-
-		// hardcoded
+		// cast
 		pages = strconv.Itoa(i)
 
 		// fmt.Println(pages)
@@ -177,9 +132,6 @@ func scrap(url, authorFirstName, authorLastName string) {
 		sc.Visit(fullUrl)
 
 	}
-	// fmt.Println(articles)
-	// fmt.Println(noArticles)
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
