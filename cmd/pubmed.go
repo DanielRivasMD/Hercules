@@ -83,23 +83,37 @@ to quickly create a Cobra application.`,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func scrap(url, authorFirstName, authorLastName string) {
+// func pager(url, authorFirstName, authorLastName string) int {
 
 	// c := colly.NewCollector(
 	// // colly.AllowedDomains(url),
 	// )
+// 	var noArt int
 
 	// c.OnRequest(func(r *colly.Request) {
 	// 	// r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/118.0")
 	// 	fmt.Println("Visiting", r.URL)
 	// })
+// 	c := colly.NewCollector(
+// 	// colly.AllowedDomains(url),
+// 	)
 
 	// c.OnResponse(func(r *colly.Response) {
 	// 	fmt.Println("Response Code", r.StatusCode)
 	// })
+// 	// collect article number
+// 	c.OnHTML("h3", func(h *colly.HTMLElement) {
+// 		h.ForEach("span", func(_ int, h *colly.HTMLElement) {
+// 			// fmt.Println(h.Text)
+// 			noArt, _ = strconv.Atoi(h.Text)
+// 		})
+// 	})
 
 	// c.OnError(func(r *colly.Response, err error) {
 	// 	fmt.Println("error", err.Error())
 	// })
+// 	searchUrl := url + "?term=" + authorLastName + "+" + authorFirstName + "[" + "author" + "]"
+// 	c.Visit(searchUrl)
 
 	// // collect article number
 	// c.OnHTML("h3", func(h *colly.HTMLElement) {
@@ -108,9 +122,11 @@ func scrap(url, authorFirstName, authorLastName string) {
 	// 		noArticles, _ = strconv.Atoi(h.Text)
 	// 	})
 	// })
+// 	return noArt
 
 	// searchUrl := url + "?term=" + authorLastName + "+" + authorFirstName + "[" + "author" + "]"
 	// c.Visit(searchUrl)
+// }
 
 	pgs := 4
 
