@@ -70,10 +70,13 @@ to quickly create a Cobra application.`,
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-		// fmt.Println("pubmed called")
-		scrap(pubmed, authorFirstName, authorLastName)
-		// scrap(jstore)
-		// fmt.Println("scrapped!")
+		// noArt := pager(address, authorFirstName, authorLastName)
+
+		// cast
+		noArt, _ := strconv.Atoi(noArticles)
+
+		// scrap data
+		scrap(address, authorFirstName, authorLastName, noArt)
 	},
 }
 
