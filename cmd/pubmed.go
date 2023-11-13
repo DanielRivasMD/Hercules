@@ -168,15 +168,12 @@ func scrap(url, authorFirstName, authorLastName string) {
 func init() {
 	rootCmd.AddCommand(pubmedCmd)
 
-	// Here you will define your flags and configuration settings.
+	// persistent flags
+	pubmedCmd.PersistentFlags().StringVarP(&address, "address", "a", "https://pubmed.ncbi.nlm.nih.gov/", "Website address")
+	pubmedCmd.PersistentFlags().StringVarP(&authorFirstName, "first", "f", "", "Author first name")
+	pubmedCmd.PersistentFlags().StringVarP(&authorLastName, "last", "l", "", "Author last name")
+	pubmedCmd.PersistentFlags().StringVarP(&noArticles, "number", "n", "", "Number of articles")
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// pubmedCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// pubmedCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
