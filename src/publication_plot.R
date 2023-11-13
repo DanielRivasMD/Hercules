@@ -1,21 +1,27 @@
+####################################################################################################
 
-df <- read_tsv('mauceli.raw', col_names = "authors")
+sorter <- function(raw) {
 
-int <- 5
-up <- 40
+  df <- read_tsv(paste0(raw, '.raw'), col_names = "authors")
 
-fr <- seq(0, up, by = int)
+  int <- 5
+  up <- dim(df)[1]
 
-tb <- df %>% pull(authors) %>% table
+  fr <- seq(0, up, by = int)
+
+  tb <- df %>% pull(authors) %>% table
 
 
-for (f in fr) {
-  tb[which(tb >= f & tb < (f + int))] %>% print
+  for (f in fr) {
+    tb[which(tb >= f & tb < (f + int))] %>% print
+  }
+
+  dc <- tibble(authors = names(tb), count = tb)
+
+  dc %<>% arrange(desc(count))
+
+  write.csv(as.data.frame(dc), paste0(raw, '.csv'), quote = F, row.names = F)
+
 }
 
-dc <- tibble(authors = names(tb), count = tb)
-
-dc %<>% arrange(desc(count))
-
-write.csv(as.data.frame(dc), 'mauceli.csv', quote = F, row.names = F)
-
+####################################################################################################
