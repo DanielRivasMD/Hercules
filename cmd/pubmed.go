@@ -29,21 +29,21 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
+// default
+var perPage = 10
+
+// arguments
 var (
-	pubmed = "https://pubmed.ncbi.nlm.nih.gov/"
-	jstore = "https://www.j2store.net/demo/index.php/shop"
-	// authorFirstName = "SD"
-	// authorLastName  = "Rivas-Carrillo"
-	authorFirstName = "Evan"
-	authorLastName  = "Mauceli"
-	perPage         = 10
+	address         string
+	authorFirstName string
+	authorLastName  string
+	noArticles      string
 )
 
+// declarations
 var (
 	pages      string
 	articles   []article
-	noArticles int
 	TmpArticle article
 	Authors    string
 	Journal    string
