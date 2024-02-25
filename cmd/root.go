@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 danielrivasmd@gmail.com
+Copyright © 2023 Daniel Rivas <danielrivasmd@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,10 +18,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
@@ -38,10 +38,11 @@ var (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// rootCmd
 var rootCmd = &cobra.Command{
 	Use:   "hercules",
 	Short: "Web data bounty hunter",
-	Long: chalk.Green.Color("Daniel Rivas <danielrivasmd@gmail.com>") + `
+	Long: chalk.Green.Color("Daniel Rivas Daniel Rivas <Daniel Rivas <Daniel Rivas <danielrivasmd@gmail.com>>>") + `
 
 ` + chalk.Green.Color("Hercules") + chalk.Blue.Color(` will perform all the labours as commanded.
 
@@ -59,6 +60,7 @@ with built-in and accessible documentation.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// execute
 func Execute() {
 	ε := rootCmd.Execute()
 	if ε != nil {
@@ -69,49 +71,51 @@ func Execute() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// initialize config
 func initializeConfig(κ *cobra.Command, configPath string, configName string) error {
 
 	// initialize viper
-	ʌ := viper.New()
+	ω := viper.New()
 
 	// collect config path & file from persistent flags
-	ʌ.AddConfigPath(configPath)
-	ʌ.SetConfigName(configName)
+	ω.AddConfigPath(configPath)
+	ω.SetConfigName(configName)
 
-	// read the config file
-	ε := ʌ.ReadInConfig()
+	// read config file
+	ε := ω.ReadInConfig()
 	if ε != nil {
-		// okay if there isn't a config file
+		// okay if no config file
 		_, ϙ := ε.(viper.ConfigFileNotFoundError)
 		if !ϙ {
-			// return an error if we cannot parse the config file
+			// error if not parse config file
 			return ε
 		}
 	}
 
-	// bind flags to viper
-	bindFlags(κ, ʌ)
+	// bind flags viper
+	bindFlags(κ, ω)
 
 	return nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// bind each cobra flag to its associated viper configuration
-func bindFlags(κ *cobra.Command, ʌ *viper.Viper) {
+// bind each cobra flag viper configuration
+func bindFlags(κ *cobra.Command, ω *viper.Viper) {
 
-	κ.Flags().VisitAll(func(σ *pflag.Flag) {
+	κ.Flags().VisitAll(func(ζ *pflag.Flag) {
 
-		// apply the viper config value to the flag when the flag is not set and viper has a value
-		if !σ.Changed && ʌ.IsSet(σ.Name) {
-			ν := ʌ.Get(σ.Name)
-			κ.Flags().Set(σ.Name, fmt.Sprintf("%v", ν))
+		// apply viper config value flag
+		if !ζ.Changed && ω.IsSet(ζ.Name) {
+			ν := ω.Get(ζ.Name)
+			κ.Flags().Set(ζ.Name, fmt.Sprintf("%v", ν))
 		}
 	})
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// execute prior main
 func init() {
 
 	// persistent flags
