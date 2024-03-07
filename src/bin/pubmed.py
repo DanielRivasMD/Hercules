@@ -27,8 +27,10 @@ from selenium.webdriver.common.keys import Keys
 # authorQueried = sys.argv[2]
 
 # arguments
-httpSource = "https://pubmed.ncbi.nlm.nih.gov/"
-authorQueried = "Rivas-Carrillo SD"
+httpSource = 'https://pubmed.ncbi.nlm.nih.gov/?term=rivas-carrillo+sd%5Bauthor%5D&sort=date'
+authorQueried = 'Rivas-Carrillo SD'
+
+# https://pubmed.ncbi.nlm.nih.gov/?term=rivas-carrillo+sd%5Bauthor%5D&sort=date
 
 # launch browser
 browser = webdriver.Chrome()
@@ -40,7 +42,7 @@ browser.get(httpSource)
 
 # prepare output file
 outputFile = authorQueried.replace(" ", "_")
-with open(dataDir + outputFile + '.csv', 'w') as csv_file:
+with open(dataDir + '/' + outputFile + '.csv', 'w') as csv_file:
   csv_writer = writer(csv_file)
   headers = ['Title', 'Journal', 'Position', 'Authors']
   csv_writer.writerow(headers)
@@ -50,7 +52,7 @@ with open(dataDir + outputFile + '.csv', 'w') as csv_file:
 
   # load into bs4 from source
   soup = BeautifulSoup(source.text, 'html.parser')
-  publication_collector()
+  publication_collector(soup, csv_writer, authorQueried)
 
   # page loop
   try:
