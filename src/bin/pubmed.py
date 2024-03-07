@@ -20,8 +20,7 @@ from selenium.webdriver.common.keys import Keys
 
 ####################################################################################################
 
-# # change directory
-# os.chdir("/Users/Daniel/Factorem/PUBMEDrecord/")
+# TODO: create struct hold info
 
 # # arguments
 # httpSource = sys.argv[1]
@@ -32,7 +31,7 @@ httpSource = 'https://pubmed.ncbi.nlm.nih.gov/?term=rivas-carrillo+sd%5Bauthor%5
 authorQueried = 'Rivas-Carrillo SD'
 
 # launch browser
-browser = webdriver.Firefox()
+browser = webdriver.Chrome()
 
 # directing to ncbi
 browser.get(httpSource)
@@ -54,26 +53,30 @@ for artix in range(int(no)):
   article = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-heading')
 
   article.find_element(By.CLASS_NAME, value='heading-title').text
-  # 'Whole-genome comparison of endogenous retrovirus segregation across wild and domestic host species populations'
 
   # iterate on authors
   for author in article.find_elements(By.CLASS_NAME, value='authors-list-item'):
     # collect author info
     name = author.find_element(By.CLASS_NAME, value='full-name').text
     print(name)
+
+    # collect affiliation info
     try:
-      # BUG: not finding elements
       affs = author.find_elements(By.CLASS_NAME, value='affiliation-link')
-      for aff in range(affs):
-        affix = int(aff.text)
-      if (maxaff < affix):
-        maxaff = affix
-      print(affix)
-      print(maxaff)
+      print(affs)
     except:
       print(name + ' has no affiliation')
 
-  # WIP: split into number & text
+    if (len(affs) > 0):
+      for ax in range(len(affs)):
+        affix = int(affs[ax].text)
+        if (maxaff < affix):
+          maxaff = affix
+        print(affix)
+        print(maxaff)
+
+  # TODO: join affiliation per author data
+  # split into number & text
   aff = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-affiliation-1').text.split('\n')
   print(aff)
 
@@ -85,31 +88,6 @@ with open(dataDir + '/' + outputFile + '.csv', 'w') as csv_file:
   csv_writer = writer(csv_file)
   headers = ['Title', 'Journal', 'Position', 'Authors']
   csv_writer.writerow(headers)
-
-  # get from source
-  source = requests.get(httpSource)
-
-  # load into bs4 from source
-  soup = BeautifulSoup(source.text, 'html.parser')
-  .click()
-  publication_collector(soup, csv_writer, authorQueried)
-
-  # page loop
-  try:
-    pgs = int(soup.find('h3', class_="page").input['last'])
-  except AttributeError as e:
-    pgs = 1
-  else:
-    for ix in range(1, pgs):
-
-      # turn the page
-      page_turner()
-
-      # load into bs4 from selenium
-      soup = BeautifulSoup(browser.page_source, 'html.parser')
-      publication_collector()
-  finally:
-    print("Number of pages:", pgs)
 
 browser.quit()
 
