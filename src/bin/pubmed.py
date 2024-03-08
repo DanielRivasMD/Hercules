@@ -20,7 +20,16 @@ from selenium.webdriver.common.keys import Keys
 
 ####################################################################################################
 
-# TODO: create struct hold info
+class Article:
+  def __init__(self):
+    self.title = ''
+    self.journal = ''
+    self.authors = {}
+    self.pmid = ''
+    self.abstract = ''
+
+  def __str__(self):
+    return repr('here I am!!')
 
 # # arguments
 # httpSource = sys.argv[1]
