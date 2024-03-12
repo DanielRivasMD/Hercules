@@ -28,7 +28,7 @@ class Article:
     self.abstract = ''
 
   def __str__(self):
-    return repr(self.authors)
+    return f'Article:\nTitle: {self.title}\nJournal: {self.journal}\nPMID: {self.pmid}\nAuthors: {self.authors}\nAffiliation: {self.affiliation}\n\nAbstract: {self.abstract}'
 
 # # arguments
 # httpSource = sys.argv[1]
