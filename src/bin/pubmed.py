@@ -85,7 +85,6 @@ for artix in range(int(no)):
     # collect affiliation info
     try:
       affs = author.find_elements(By.CLASS_NAME, value='affiliation-link')
-      print(affs)
     except:
       affs = []
       print(name + ' has no affiliation')
@@ -94,7 +93,6 @@ for artix in range(int(no)):
       for ax in range(len(affs)):
         affix = int(affs[ax].text)
         affiliations.append(affix)
-        print('affiliation index: ', affix)
         if (maxaff < affix):
           maxaff = affix
 
@@ -134,6 +132,7 @@ with open(dataDir + '/' + outputFile + '.csv', 'w') as csv_file:
 
 ####################################################################################################
 
+# close scrapper
 browser.quit()
 
 ####################################################################################################
