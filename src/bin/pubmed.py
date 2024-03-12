@@ -25,6 +25,7 @@ class Article:
     self.title = ''
     self.journal = ''
     self.authors = {}
+    self.affiliation = {}
     self.pmid = ''
     self.abstract = ''
 
@@ -93,10 +94,13 @@ for artix in range(int(no)):
     # collect author affiliations
     article.authors[name] = affiliations
 
-  # # TODO: join affiliation per author data
-  # # split into number & text
-  # aff = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-affiliation-1').text.split('\n')
-  # print(aff)
+  # iterate on affiliations
+  for ax in range(maxaff):
+    ax += 1
+    # split into index & text
+    aff = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-affiliation-' + str(ax)).text.split('\n')
+    article.affiliation[int(aff[0])] = aff[1]
+
 
 ####################################################################################################
 
