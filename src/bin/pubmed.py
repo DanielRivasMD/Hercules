@@ -63,11 +63,17 @@ for artix in range(int(no)):
   browser.find_element(By.ID, value='search-result-1-' + artix + '-toggle-authors').click()
   maxaff = 0
 
-  # select article information
+  # select header information
   artelem = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-heading')
+
+  # assign journal
+  article.journal = artelem.find_element(By.ID, value='search-result-1-' + artix + '-full-view-journal-trigger').text
 
   # assign title
   article.title = artelem.find_element(By.CLASS_NAME, value='heading-title').text
+
+  # assign pmid
+  article.pmid = artelem.find_element(By.CLASS_NAME, value='current-id').text
 
   # iterate on authors
   for author in artelem.find_elements(By.CLASS_NAME, value='authors-list-item'):
@@ -99,8 +105,12 @@ for artix in range(int(no)):
     ax += 1
     # split into index & text
     aff = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-affiliation-' + str(ax)).text.split('\n')
-    article.affiliation[int(aff[0])] = aff[1]
+    if (len(aff) > 1):
+      article.affiliation[int(aff[0])] = aff[1]
 
+  # select body information
+  # assign abstract
+  article.abstract = browser.find_element(By.ID, value='search-result-1-' + artix + '-eng-abstract').text
 
 ####################################################################################################
 
