@@ -29,7 +29,7 @@ class Article:
     self.abstract = ''
 
   def __str__(self):
-    return repr('here I am!!')
+    return repr(self.authors)
 
 # # arguments
 # httpSource = sys.argv[1]
@@ -50,6 +50,10 @@ no = browser.find_element(By.CLASS_NAME, value='results-amount').find_element(By
 
 # iterate on articles
 for artix in range(int(no)):
+
+  # instantiate article
+  article = Article()
+
   # adjust index
   artix += 1
   artix = str(artix)
@@ -59,35 +63,40 @@ for artix in range(int(no)):
   maxaff = 0
 
   # select article information
-  article = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-heading')
+  artelem = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-heading')
 
-  article.find_element(By.CLASS_NAME, value='heading-title').text
+  # assign title
+  article.title = artelem.find_element(By.CLASS_NAME, value='heading-title').text
 
   # iterate on authors
-  for author in article.find_elements(By.CLASS_NAME, value='authors-list-item'):
+  for author in artelem.find_elements(By.CLASS_NAME, value='authors-list-item'):
     # collect author info
     name = author.find_element(By.CLASS_NAME, value='full-name').text
-    print(name)
+    affiliations = []
 
     # collect affiliation info
     try:
       affs = author.find_elements(By.CLASS_NAME, value='affiliation-link')
       print(affs)
     except:
+      affs = []
       print(name + ' has no affiliation')
 
     if (len(affs) > 0):
       for ax in range(len(affs)):
         affix = int(affs[ax].text)
+        affiliations.append(affix)
+        print('affiliation index: ', affix)
         if (maxaff < affix):
           maxaff = affix
-        print(affix)
-        print(maxaff)
 
-  # TODO: join affiliation per author data
-  # split into number & text
-  aff = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-affiliation-1').text.split('\n')
-  print(aff)
+    # collect author affiliations
+    article.authors[name] = affiliations
+
+  # # TODO: join affiliation per author data
+  # # split into number & text
+  # aff = browser.find_element(By.ID, value='search-result-1-' + artix + '-full-view-affiliation-1').text.split('\n')
+  # print(aff)
 
 ####################################################################################################
 
