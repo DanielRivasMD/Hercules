@@ -47,6 +47,9 @@ browser.get(httpSource)
 # get article number
 no = browser.find_element(By.CLASS_NAME, value='results-amount').find_element(By.CLASS_NAME, value='value').text
 
+# preallocate array
+articles = []
+
 # iterate on articles
 for artix in range(int(no)):
 
@@ -110,14 +113,26 @@ for artix in range(int(no)):
   # assign abstract
   article.abstract = browser.find_element(By.ID, value='search-result-1-' + artix + '-eng-abstract').text
 
+  # push article
+  articles.append(article)
+
 ####################################################################################################
 
 # prepare output file
 outputFile = authorQueried.replace(" ", "_")
 with open(dataDir + '/' + outputFile + '.csv', 'w') as csv_file:
   csv_writer = writer(csv_file)
-  headers = ['Title', 'Journal', 'Position', 'Authors']
+
+  # header
+  headers = ['Title', 'Journal', 'PMID', 'Authors']
   csv_writer.writerow(headers)
+
+  # iterate on results
+  for article in articles:
+    row = [article.title, article.journal, article.pmid, ""]
+    csv_writer.writerow(row)
+
+####################################################################################################
 
 browser.quit()
 
