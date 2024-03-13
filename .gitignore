@@ -2,10 +2,10 @@
 arch
 
 # data
-data/
+data
 
 # deprecated
 deprecated
 
-# executables
-excalibur
+# python env
+venv
