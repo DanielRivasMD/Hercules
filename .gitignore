@@ -9,3 +9,9 @@ deprecated
 
 # python env
 venv
+
+# build artefacts
+hercules.egg-info
+
+# builts
+dist
