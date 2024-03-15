@@ -15,15 +15,15 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-try:
-  from hercules.version import version
-except ImportError:
-  version = 'invalid'
-  import sys
-  sys.exit('.')
+# try:
+#   from hercules.version import version
+# except ImportError:
+#   version = 'invalid'
+#   import sys
+#   sys.exit('.')
 
 __productname__ = 'hercules'
-__version__ = version
+# __version__ = version
 __author__ = 'Daniel Rivas'
 __copyright__ = 'Copyright (c) hercules'
 __author_email__ = 'danielrivasmd@gmail.com'
