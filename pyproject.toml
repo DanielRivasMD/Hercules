@@ -46,6 +46,11 @@ select = ["E", "F", "W", "I", "B0", "UP", "C4"]
 ignore = ["B008"]
 line-length = 100
 target-version = "py38"
+# BUG: not working exclude
+exclude = [
+  "arch",
+  "src"
+]
 
 [tool.coverage.report]
 exclude_lines = [
