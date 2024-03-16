@@ -97,7 +97,11 @@ def pubmed(author, outdir):
 
     # select body information
     # assign abstract
-    article.abstract = browser.find_element(By.ID, value='search-result-1-' + artix + '-eng-abstract').text
+    try:
+      article.abstract = browser.find_element(By.ID, value='search-result-1-' + artix + '-eng-abstract').text
+    except:
+      article.abstract = ''
+      print('Abstract not found')
 
     # push article
     articles.append(article)
