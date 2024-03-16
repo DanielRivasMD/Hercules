@@ -45,7 +45,11 @@ def pubmed(author, outdir):
     artix = str(artix)
 
     # expand affiliations
-    browser.find_element(By.ID, value='search-result-1-' + artix + '-toggle-authors').click()
+    try:
+      browser.find_element(By.ID, value='search-result-1-' + artix + '-toggle-authors').click()
+    except:
+      print('Affiliation not found')
+
     maxaff = 0
 
     # select header information
@@ -71,7 +75,7 @@ def pubmed(author, outdir):
         affs = aut.find_elements(By.CLASS_NAME, value='affiliation-link')
       except:
         affs = []
-        print(name + ' has no affiliation')
+        print('Author affiliation not found')
 
       if (len(affs) > 0):
         for ax in range(len(affs)):
