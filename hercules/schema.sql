@@ -3,6 +3,9 @@
 -- database
 CREATE DATABASE PubMed;
 
+-- connect database
+USE PubMed;
+
 -- article information table
 CREATE TABLE Articles (
   pmid INT,
