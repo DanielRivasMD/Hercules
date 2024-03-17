@@ -7,7 +7,7 @@ from mysql.connector import connect
 
 def insert_articles(articles, user='drivas', password='hercules', database='PubMed'):
 
-  insert_articles = """
+  sql_insert_articles = """
   INSERT INTO Articles
   (pmid, journal, title, abstract)
   VALUES (%s, %s, %s, %s)
@@ -25,7 +25,7 @@ def insert_articles(articles, user='drivas', password='hercules', database='PubM
     database=database
   ) as connection:
     with connection.cursor() as cursor:
-      cursor.executemany(insert_articles, records_articles)
+      cursor.executemany(sql_insert_articles, records_articles)
       connection.commit()
 
 ####################################################################################################
