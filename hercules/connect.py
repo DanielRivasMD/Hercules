@@ -30,3 +30,28 @@ def insert_articles(articles, user='drivas', password='hercules', database='PubM
 
 ####################################################################################################
 
+def insert_authors(articles, user='drivas', password='hercules', database='PubMed'):
+
+  sql_insert_authors = """
+  INSERT INTO Authors
+  (author_pmid, author, pmid)
+  VALUES (%s, %s, %s)
+  """
+
+  ####################################################################################################
+
+  for article in articles:
+    records_authors = []
+    for author, affiliation in article.authors.items():
+      records_authors.append((author + '_' + article.pmid, author, article.pmid))
+
+    with connect(
+      user=user,
+      password=password,
+      database=database
+    ) as connection:
+      with connection.cursor() as cursor:
+        cursor.executemany(sql_insert_authors, records_authors)
+        connection.commit()
+
+####################################################################################################
