@@ -5,6 +5,7 @@ import click
 ####################################################################################################
 
 from .pubmed import pubmed
+from .connect import create_db, insert_articles, insert_authors, insert_affiliations
 
 ####################################################################################################
 
@@ -13,6 +14,11 @@ from .pubmed import pubmed
 @click.option('--outdir', default='.', help='Output directory.')
 def main_hercules(author, outdir):
   """PUBMED web scrapper."""
-  pubmed(author, outdir)
+  articles = pubmed(author, outdir)
+  # WIP: modify `author` to lower case & replace whitespace
+  create_db(author)
+  insert_articles(articles)
+  insert_authors(articles)
+  insert_affiliations(articles)
 
 ####################################################################################################

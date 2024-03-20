@@ -127,4 +127,6 @@ def pubmed(author, outdir):
   # close scrapper
   browser.quit()
 
+  return articles
+
 ####################################################################################################
