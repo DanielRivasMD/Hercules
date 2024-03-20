@@ -44,6 +44,12 @@ import '.just/py.conf'
 
 ####################################################################################################
 
+# build & install app
+@install:
+  source .just/pyinstall.sh
+
+####################################################################################################
+
 # watch changes
 watch:
   watchexec --clear --watch {{pyapp}} -- 'source .just/pyinstall.sh'
