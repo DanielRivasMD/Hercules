@@ -1,7 +1,26 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import puppeteer from "puppeteer";
+import yargs from "yargs";
 import fs from "fs";
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const argv = yargs(process.argv.slice(2))
+  .option("input", {
+    alias: "i",
+    type: "string",
+    description: "input address",
+  })
+  .option("output", {
+    alias: "o",
+    type: "string",
+    description: "output file",
+  })
+  .help().argv;
+
+console.log(`Address, ${argv.input || "URL"}`);
+console.log(`Output: ${argv.output || "out.txt"}`);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
