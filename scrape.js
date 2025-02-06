@@ -19,13 +19,10 @@ const argv = yargs(process.argv.slice(2))
   })
   .help().argv;
 
-console.log(`Address, ${argv.input || "URL"}`);
-console.log(`Output: ${argv.output || "out.txt"}`);
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const scrapeWikipedia = async () => {
-  const url = "https://no.wikipedia.org/wiki/Norge";
+  const url = argv.input;
 
   // launch a browser instance
   const browser = await puppeteer.launch({ headless: true });
