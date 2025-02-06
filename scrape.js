@@ -41,7 +41,7 @@ const scrapeWikipedia = async () => {
       return paragraph ? paragraph.innerText.trim() : "No content found.";
     });
 
-    fs.writeFileSync("norsk.txt", JSON.stringify(content, null, 2));
+    fs.writeFileSync(argv.output, content, "utf8");
   } catch (error) {
     console.error("Error scraping Wikipedia:", error);
   } finally {
