@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "puppeteer": "^22.15.0"
+    "puppeteer": "^22.15.0",
+    "yargs": "^17.7.2"
   }
 }
