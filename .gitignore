@@ -1,17 +1,8 @@
-# archive
-arch
-
 # data
 data
 
 # deprecated
 deprecated
 
-# python env
-venv
-
-# build artefacts
-hercules.egg-info
-
-# builts
-dist
+# dependencies
+node_modules
