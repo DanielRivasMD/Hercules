@@ -1,35 +1,42 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// load dependencies
-import puppeteer from "npm:puppeteer";
-import { parse } from "https://deno.land/std@0.224.0/cli/parse.ts";
-import { writeTextFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
+import { launch } from "jsr:@astral/astral";
+import { parseArgs } from "jsr:@std/cli@1/parse-args";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // parse command-line arguments
-const args = parse(Deno.args);
-const inputUrl = args.input || "https://no.wikipedia.org/wiki/Norge";
-const outputFile = args.output || "output.txt";
+const args = parseArgs(Deno.args, {
+  string: ["input", "output"],
+  alias: { i: "input", o: "output" },
+  default: {
+    input: "https://no.wikipedia.org/wiki/Norge",
+    output: "output.txt",
+  },
+});
+
+const inputUrl = args.input;
+const outputFile = args.output;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const scrapeWikipedia = async () => {
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
+  const browser = await launch({ headless: true });
 
   try {
-    // navigate URL
+    const page = await browser.newPage();
+
+    // navigate to the URL
     await page.goto(inputUrl, { waitUntil: "domcontentloaded" });
 
     // extract content
     const content = await page.evaluate(() => {
       const paragraph = document.querySelector("#mw-content-text");
-      return paragraph ? paragraph.innerText.trim() : "No content found.";
+      return paragraph ? (paragraph as HTMLElement).innerText.trim() : "No content found.";
     });
 
-    // write output
-    await writeTextFile(outputFile, content);
+    // write output — Deno builtin, no import needed
+    await Deno.writeTextFile(outputFile, content);
     console.log(`Content saved to ${outputFile}`);
   } catch (error) {
     console.error("Error scraping Wikipedia:", error);
@@ -41,6 +48,6 @@ const scrapeWikipedia = async () => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // execute
-scrapeWikipedia();
+await scrapeWikipedia();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
